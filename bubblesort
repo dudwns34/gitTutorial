@@ -1,0 +1,76 @@
+#include <iostream>//standard input and output stream
+#include <stdlib.h>//to make random number
+#include <chrono>//to check running time as ns unit
+using namespace std;//to use std
+
+int main()
+{
+	int n = 1000;//the size of array
+	int arr[1000];//the array to deal with
+
+	//random number array logic for average case
+	srand((unsigned)time(NULL));//initialize srand
+
+	bool Check[1000] = { false, };//bool array to determine if it is duplicated
+
+	//the course of generating random numbers
+	for (int i = 0; i < n;)//repeat as much as n
+	{
+		int temp = rand() % n;//generate random numbers from 0 to n
+
+		if (Check[temp] == false)//if it is not duplicated
+		{
+			Check[temp] = true;//make Check[temp] true
+			arr[i] = temp;//put the value in arr[i]
+			++i;//add 1 to i
+		}
+	}
+
+	//sorted array logic for best case
+	/*for (int x = 0; x < n; x++) {
+		arr[x] = x;
+	}*/
+
+	//reversed array logic for worst case
+	/*for (int x = n; x > 0; x--) {
+		arr[n-x] = x;
+	}*/
+
+	//print array before sorting
+	/*cout << "before" << endl;
+	for (int x = 0; x < n; x++) {
+		cout << arr[x] << " ";
+	}
+	cout << endl;*/
+
+	int swap;//variable to know if there is swapping
+	int count = 0;//variable to know the number of comparisons 
+
+	auto start = chrono::high_resolution_clock::now();//variable to check start time
+	//bubble sort
+	for (int i = 0; i < (sizeof(arr) / sizeof(arr[0])) - 1; i++) {//repeat as much as the size of array -1
+		swap = 0;//put 0 in swap
+		for (int j = 0; j < (sizeof(arr) / sizeof(arr[0])) - 1 - i; j++) {//repeat as much as the size of array -1 -i
+			count++;//add 1 to count
+			if (arr[j] > arr[j + 1]) {//if arr[j] > arr[j + 1]
+				swap++;//add 1 to swap
+				//swapping
+				int temp = arr[j + 1];
+				arr[j + 1] = arr[j];
+				arr[j] = temp;
+			}
+		}
+		if (swap == 0) break;//if swap is equal to 0, break
+	}
+	auto end = chrono::high_resolution_clock::now();//variable to check end time
+	//print array after sorting
+	cout << "Result" << endl;
+	for (int k = 0; k < n; k++) {
+		cout << arr[k] << " ";
+	}
+	cout << endl << endl;
+	cout << "The number of comparisons : " << count << endl;//print the number of comparisons
+	cout << "Time : " << (end-start).count()/(float)1000000000 << endl;//print running time as s unit
+
+	return 0;//return 0
+}
